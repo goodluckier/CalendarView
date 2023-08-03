@@ -127,7 +127,8 @@ public class MainActivity extends BaseActivity implements
                                 mCalendarView.scrollToPre(false);
                                 break;
                             case 3:
-                                mCalendarView.scrollToNext(false);
+                                boolean success = mCalendarView.scrollToNext(false);
+                                Log.e("scrollToNext",String.valueOf(success));
                                 break;
                             case 4:
                                 //mCalendarView.scrollToCurrent(true);

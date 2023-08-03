@@ -471,8 +471,8 @@ public class CalendarView extends FrameLayout {
     /**
      * 滚动到下一个月
      */
-    public void scrollToNext() {
-        scrollToNext(false);
+    public boolean scrollToNext() {
+        return scrollToNext(false);
     }
 
     /**
@@ -480,22 +480,31 @@ public class CalendarView extends FrameLayout {
      *
      * @param smoothScroll smoothScroll
      */
-    public void scrollToNext(boolean smoothScroll) {
+    public boolean scrollToNext(boolean smoothScroll) {
+        ViewPager scrollViewPager;
+        boolean scrollSuccess = true;
         if (isYearSelectLayoutVisible()) {
+            scrollViewPager = mYearViewPager;
             mYearViewPager.setCurrentItem(mYearViewPager.getCurrentItem() + 1, smoothScroll);
         } else if (mWeekPager.getVisibility() == VISIBLE) {
+            scrollViewPager = mWeekPager;
             mWeekPager.setCurrentItem(mWeekPager.getCurrentItem() + 1, smoothScroll);
         } else {
+            scrollViewPager = mMonthPager;
             mMonthPager.setCurrentItem(mMonthPager.getCurrentItem() + 1, smoothScroll);
         }
+        if (scrollViewPager.getAdapter() != null) {
+            scrollSuccess = scrollViewPager.getCurrentItem() + 1 < scrollViewPager.getAdapter().getCount();
+        }
 
+        return scrollSuccess;
     }
 
     /**
      * 滚动到上一个月
      */
-    public void scrollToPre() {
-        scrollToPre(false);
+    public boolean scrollToPre() {
+        return scrollToPre(false);
     }
 
     /**
@@ -503,14 +512,20 @@ public class CalendarView extends FrameLayout {
      *
      * @param smoothScroll smoothScroll
      */
-    public void scrollToPre(boolean smoothScroll) {
+    public boolean scrollToPre(boolean smoothScroll) {
+        boolean scrollSuccess;
         if (isYearSelectLayoutVisible()) {
             mYearViewPager.setCurrentItem(mYearViewPager.getCurrentItem() - 1, smoothScroll);
+            scrollSuccess = mYearViewPager.getCurrentItem() > 0;
         } else if (mWeekPager.getVisibility() == VISIBLE) {
             mWeekPager.setCurrentItem(mWeekPager.getCurrentItem() - 1, smoothScroll);
+            scrollSuccess = mWeekPager.getCurrentItem() > 0;
         } else {
             mMonthPager.setCurrentItem(mMonthPager.getCurrentItem() - 1, smoothScroll);
+            scrollSuccess = mMonthPager.getCurrentItem() > 0;
         }
+
+        return scrollSuccess;
     }
 
     /**
